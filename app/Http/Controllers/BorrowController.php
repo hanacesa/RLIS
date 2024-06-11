@@ -39,25 +39,29 @@ class BorrowController extends Controller
         $validated = $request->validate([
             'member_id' => 'required|exists:members,id',
             'book_id' => 'required|exists:books,id',
-            //'returndate' => 'nullable|date',
         ]);
 
-         // Check if the book is already borrowed by any member
-         $existingBorrow = Borrow::where('book_id', $validated['book_id'])
-         ->whereNull('returndate')
-         ->first();
+        // Check if the book is already borrowed by any member
+        $existingBorrow = Borrow::where('book_id', $validated['book_id'])
+            ->whereNull('returndate')
+            ->first();
 
-     if ($existingBorrow) {
-         return redirect()->back()->with('error', 'The book is already borrowed by another member.');
-     }
-            
+        if ($existingBorrow) {
+            return redirect()->back()->with('error', 'The book is already borrowed by another member.');
+        }
 
+        // Create a new borrow record
         Borrow::create([
             'member_id' => $validated['member_id'],
             'book_id' => $validated['book_id'],
             'borrowdate' => now(),
             'returndate' => null,
         ]);
+
+        // Update the book status to 'borrowed'
+        $book = Book::findOrFail($validated['book_id']);
+        $book->status = 'borrowed';
+        $book->save();
 
         return redirect()->route('borrow.index')->with('success', 'Book borrowed successfully.');
     }
@@ -85,6 +89,11 @@ class BorrowController extends Controller
             'borrowdate' => now(),
         ]);
 
+        // Update the book status to 'borrowed'
+        $book = Book::findOrFail($validated['book_id']);
+        $book->status = 'borrowed';
+        $book->save();
+
         return redirect()->route('borrow.index')->with('success', 'Book borrowed successfully.');
     }
 
@@ -98,6 +107,11 @@ class BorrowController extends Controller
         // Update the returndate
         $borrow->returndate = now();
         $borrow->save();
+
+        // Update the book status to 'available'
+        $book = Book::findOrFail($borrow->book_id);
+        $book->status = 'available';
+        $book->save();
 
         return redirect()->back()->with('success', 'Book returned successfully.');
     }
@@ -116,23 +130,25 @@ class BorrowController extends Controller
 
     public function update(Request $request, Borrow $borrow)
     {
-        // Update the name field separately
-    $borrow->member_id = $request->input('member_id');
-    $borrow->book_id = $request->input('book_id');
-    $borrow->borrowdate = $request->input('borrowdate');
-    $borrow->returndate = $request->input('returndate');
-    $borrow->update();
+        // Update the borrow record
+        $borrow->member_id = $request->input('member_id');
+        $borrow->book_id = $request->input('book_id');
+        $borrow->borrowdate = $request->input('borrowdate');
+        $borrow->returndate = $request->input('returndate');
+        $borrow->update();
 
-    // Redirect back with success message
-    //return redirect()->back()->withSuccess('Book record updated successfully.');
-
-    return redirect()->route('borrow.index')->with('success', 'Borrow record updated successfully.');
+        return redirect()->route('borrow.index')->with('success', 'Borrow record updated successfully.');
     }
 
     public function destroy(Borrow $borrow)
     {
+        // Update the book status to 'available' before deleting the borrow record
+        $book = Book::findOrFail($borrow->book_id);
+        $book->status = 'available';
+        $book->save();
+
         $borrow->delete();
-        return redirect()->route('borrow.index')
-            ->withSuccess('Borrow record deleted successfully.');
+
+        return redirect()->route('borrow.index')->with('success', 'Borrow record deleted successfully.');
     }
 }

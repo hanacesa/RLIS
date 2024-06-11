@@ -96,6 +96,10 @@ return redirect()->route('book.index')->with('success', 'New book record added s
      */
     public function destroy(Book $book)
     {
+        if ($book->status === 'borrowed') {
+            return redirect()->route('book.index')->with('error', 'Cannot delete a borrowed book.');
+        }
+
         $book->delete();
         return redirect()->route('book.index')
             ->withSuccess('Book record deleted successfully.');

@@ -70,11 +70,7 @@
                             <li><a href="{{ route('volunteer.create') }}">Add New Volunteer</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown"><a href="{{ url('/supervisor') }}"><span>Supervisor</span> <i class="bi bi-chevron-down"></i></a>
-                        <ul>
-                            <li><a href="{{ route('supervisor.create') }}">Add New Supervisor</a></li>
-                        </ul>
-                    </li>
+                    
                     @endcan
 
                     <!-- Right Side Of Navbar -->

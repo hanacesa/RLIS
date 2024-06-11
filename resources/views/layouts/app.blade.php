@@ -35,6 +35,24 @@
     * Author: BootstrapMade.com
     * License: https://bootstrapmade.com/license/
     ======================================================== -->
+
+    <style>
+    .portfolio .status-available {
+        background-color: #28cf3b;
+        color: white;
+        padding: 5px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .portfolio .status-borrowed {
+        background-color: red;
+        color: white;
+        padding: 5px;
+        border-radius: 5px;
+        text-align: center;
+    }
+</style>
 </head>
 <body>
     <!-- ======= Header ======= -->
@@ -70,11 +88,7 @@
                             <li><a href="{{ route('volunteer.create') }}">Add New Volunteer</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown"><a href="{{ url('/supervisor') }}"><span>Supervisor</span> <i class="bi bi-chevron-down"></i></a>
-                        <ul>
-                            <li><a href="{{ route('supervisor.create') }}">Add New Supervisor</a></li>
-                        </ul>
-                    </li>
+                    
                     @endcan
 
                     <!-- Right Side Of Navbar -->
@@ -113,9 +127,11 @@
     <section id="bg">
         <div class="bg-container" data-aos="fade-up">
         <div class="container">
-            <main class="py-4">
-                @yield('content')
-            </main>
+            
+            <div id="app">
+        @yield('content')
+    </div>
+            
         </div>
         </div>
         </section><!-- End Hero -->

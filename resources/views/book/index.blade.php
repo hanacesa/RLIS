@@ -7,6 +7,14 @@
     {{ session('success') }}
 </div>
 @endif
+@if(session('error'))
+<div class="alert alert-danger">
+    {{ session('error') }}
+</div>
+@endif
+
+
+
 <section id="portfolio" class="portfolio">
 <div class="container-fluid">
     <h2> Book Record </h2>
@@ -19,6 +27,7 @@
                 <th>Publisher Name</th>
                 <th>Published Year</th>
                 <th>Category</th>
+                <th>Status</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -32,6 +41,10 @@
                 <td>{{ $book->publishername }}</td>
                 <td>{{ $book->publishedyear }}</td>
                 <td>{{ $book->category }}</td>
+                <td class="@if($book->status === 'available') status-available @else status-borrowed @endif">
+                    {{ $book->status }}</td>
+                      
+                    </td>
                 <td>
 
                 <div class="btn-group" role="group">
@@ -43,11 +56,15 @@
                                 @endif
                                 <a href="{{ route('book.edit', $book->id) }}" class="filter-web">Edit</a>
                                 
+                                @if($book->status === 'borrowed')
+                                    <button type="button" class="filter-web" onclick="alert('Cannot delete a borrowed book.')">Delete</button>
+                                @else
                                     <form method="post" action="{{ route('book.destroy', $book->id) }}" onsubmit="return confirm('Are you sure you want to delete this book?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="filter-web">Delete</button>
                                     </form>
+                                    @endif
                                 
                             </ul>
                         </div>
