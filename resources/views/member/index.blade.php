@@ -163,13 +163,9 @@
                 <div class="btn-group" role="group">
                             <ul id="portfolio-flters">
                                 <li><a href="{{ route('book.index', ['member_id' => $member->id]) }}" class="filter-web">Borrow</a></li>
-                                <li><a href="{{ route('member.edit', $member->id) }}" class="filter-web">Edit</a></li>
+                                <li><a href="{{ route('member.edit', $member->id) }}" class="filter-web">Update</a></li>
                                 <li>
-                                    <form method="post" action="{{ route('member.destroy', $member->id) }}" onsubmit="return confirm('Are you sure you want to delete this Member?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="filter-web">Delete</button>
-                                    </form>
+                                <a href="{{ route('member.show', $member->id) }}" class="filter-web">History</a>
                                 </li>
                             </ul>
                         </div>

@@ -45,5 +45,7 @@ Route::post('borrow/return', [BorrowController::class, 'returnBook'])->name('bor
 Route::get('/supervisor/create', [SupervisorController::class, 'create'])->name('supervisor.create');
 Route::post('/supervisor', [SupervisorController::class, 'store'])->name('supervisor.store');
 
+Route::get('/member/{id}/history', [MemberController::class, 'show'])->name('member.show');
+
 
 //Route::get('book', 'BookController@index')->name('book.index');

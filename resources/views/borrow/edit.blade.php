@@ -112,7 +112,7 @@
             <div class="container">
             <section id="member" class="member">
 <div class="card-header">
-<h2>Edit Borrow Record</h2>
+<h2>Return Book</h2>
 </div>
 @if(session('success'))
 <div class="alert alert-success">

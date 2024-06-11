@@ -58,10 +58,12 @@ return redirect()->route('member.index')->with('success', 'New member record add
     /**
      * Display the specified resource.
      */
-    public function show(Member $member)
-    {
-        //
-    }
+    public function show($id)
+{
+    $member = Member::findOrFail($id);
+    $borrowedBooks = $member->borrows()->with('book')->get();
+    return view('member.show', compact('member', 'borrowedBooks'));
+}
 
     /**
      * Show the form for editing the specified resource.

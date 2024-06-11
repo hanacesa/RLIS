@@ -122,6 +122,12 @@ class VolunteerController extends Controller
      */
     public function destroy(Volunteer $volunteer)
     {
+        $user = User::where('volunteer_id', $volunteer->id)->first();
+
+        if ($user) {
+            $user->delete();
+        }
+
         $volunteer->delete();
         return redirect()->route('volunteer.index')
             ->withSuccess('Volunteer record deleted successfully.');

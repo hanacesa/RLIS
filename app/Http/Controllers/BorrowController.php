@@ -123,6 +123,12 @@ class BorrowController extends Controller
         return view('book.index', compact('books', 'member_id'));
     }
 
+    public function show(Member $member)
+    {
+        $borrowedBooks = $member->borrows()->with('book')->get();
+        return view('member.show', compact('member', 'borrowedBooks'));
+    }
+
     public function edit(Borrow $borrow)
     {
         return view('borrow.edit', compact('borrow'));
@@ -136,6 +142,13 @@ class BorrowController extends Controller
         $borrow->borrowdate = $request->input('borrowdate');
         $borrow->returndate = $request->input('returndate');
         $borrow->update();
+
+        // If a return date is set, update the book's status
+        if ($borrow->returndate) {
+            $book = Book::findOrFail($borrow->book_id);
+            $book->status = 'available';
+            $book->save();
+        }
 
         return redirect()->route('borrow.index')->with('success', 'Borrow record updated successfully.');
     }
