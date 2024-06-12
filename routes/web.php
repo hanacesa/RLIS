@@ -41,7 +41,7 @@ Route::post('borrow/book', [BorrowController::class, 'borrowBook'])->name('borro
 Route::get('borrow', [BorrowController::class, 'index'])->name('borrow.index');
 Route::post('borrow/return', [BorrowController::class, 'returnBook'])->name('borrow.return');
 
-// routes/web.php
+
 Route::get('/supervisor/create', [SupervisorController::class, 'create'])->name('supervisor.create');
 Route::post('/supervisor', [SupervisorController::class, 'store'])->name('supervisor.store');
 
